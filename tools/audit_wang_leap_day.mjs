@@ -22,7 +22,7 @@ const subject=astro.withOptions({
 });
 const natal=subject.toJSON();
 const studies=[
- {year:2020,yearBranch:"子",leap:4,precedingMonthDays:30,fixtures:[
+ {year:2020,yearBranch:"子",leap:4,precedingMonthDays:30,leapMonthDays:29,fixtures:[
   ["2020-05-22",4,30,"regular_previous"],
   ["2020-05-23",-4,1,"leap_early"],
   ["2020-06-06",-4,15,"leap_early"],
@@ -31,7 +31,7 @@ const studies=[
   ["2020-06-21",5,1,"regular_following"],
   ["2020-06-22",5,2,"regular_following"]
  ]},
- {year:2023,yearBranch:"卯",leap:2,precedingMonthDays:30,fixtures:[
+ {year:2023,yearBranch:"卯",leap:2,precedingMonthDays:30,leapMonthDays:29,fixtures:[
   ["2023-03-21",2,30,"regular_previous"],
   ["2023-03-22",-2,1,"leap_early"],
   ["2023-04-05",-2,15,"leap_early"],
@@ -69,8 +69,8 @@ for(const study of studies){
        expected=S(I(followingMonthLife)+day-16);
        accounting="next effective month, days 16.. treated as days 1..";break;
     case "regular_following":
-       expected=S(I(followingMonthLife)+15+day-1);
-       accounting="15 late leap days + regular following month day N";break;
+       expected=S(I(followingMonthLife)+(study.leapMonthDays-15)+day-1);
+       accounting="remaining leap month days (14 when leap month has 29 days) + following regular month day N";break;
     default:throw Error("unknown phase");
    }
    records.push({date,year:study.year,lunar:{month,day},phase,
@@ -78,7 +78,7 @@ for(const study of studies){
      iztro_month_palace:actualMonthly,
      previous_month_palace:previousMonthLife,
      following_month_palace:followingMonthLife,
-     preceding_month_days:study.precedingMonthDays,source_page:58,
+     preceding_month_days:study.precedingMonthDays,leap_month_days:study.leapMonthDays,source_page:58,
      status:expected===actual?"AGREES_WITH_INTERPRETATION":"DIFFERS_FROM_INTERPRETATION",
      accounting});
  }
