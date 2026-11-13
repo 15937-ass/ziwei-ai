@@ -24,6 +24,27 @@ python -m pytest -q
 
 输入采用出生地民用公历时间 `civil_datetime`、东经 `longitude_east_deg`、历史时区 `timezone`、用于顺逆的 `gender`。**此版不支持只输入省市名称来猜经度**，也不接受已校正真太阳时直接作为民用时间重复修正。
 
+## 实际查看排盘输出（无需 HTTP API）
+
+**目前是命令行/ Python 函数接口，没有可从浏览器访问的在线排盘服务。**
+
+可直接使用仓库附带的合成北京出生资料运行：
+
+```bash
+python -m pip install -e '.[dev]'
+npm ci --ignore-scripts --no-audit --no-fund
+python tools/demo_chart.py
+```
+
+生成两个文件：
+
+- `audit_out/example_chart_full.json`：完整 `ChartSnapshot`，包括真太阳时、十二宫、主辅杂曜、四化等字段。
+- `audit_out/example_chart_summary.md`：可直接阅读的十二宫正曜表格。
+
+也可以执行 `python -m ziwei.chart examples/birth_input.example.json` 直接将完整 JSON 输出到终端。GitHub Actions 中的 `demo-chart-example` 构建附件可直接查看同一真实样本。
+
+想测试其他命盘时，复制 `examples/birth_input.example.json` 并填写当地民用出生时间、经度和历史时区；不要将真实用户的出生信息提交到公开仓库。
+
 ## 研究与商用边界
 
 - 命盘事实、原典规则和模型推断必须分离；LLM 不允许重新计算或修改排盘。
