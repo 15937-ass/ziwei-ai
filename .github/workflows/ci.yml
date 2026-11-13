@@ -30,11 +30,15 @@ jobs:
         run: python -m pytest -q
       - name: Generate source-grounded Wang placement audit
         run: node tools/audit_wang_rules.mjs
+      - name: Generate extended independent placement oracles
+        run: node tools/audit_wang_extra.mjs
       - name: Publish placement differences for review
         if: always()
         uses: actions/upload-artifact@v4
         with:
           name: wang-placement-audit
-          path: audit_out/wang_location_audit.json
+          path: |
+            audit_out/wang_location_audit.json
+            audit_out/wang_extra_audit.json
           if-no-files-found: warn
           retention-days: 30
