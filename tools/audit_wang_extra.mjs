@@ -234,6 +234,31 @@ const debugSummary={
 };
 fs.writeFileSync("audit_out/engine_schema_probe.json",JSON.stringify(debugSummary,null,2)+"\n");
 
+
+const hsrc=astro.withOptions({
+ type:"lunar",dateStr:"2000-5-10",timeIndex:4,gender:"male",
+ fixLeap:true,astroType:"heaven",language:"zh-CN",config:CONFIG
+});
+const hr=hsrc.horoscope("2008-07-16",6);
+const horo=typeof hr.toJSON==="function"?hr.toJSON():hr;
+fs.writeFileSync("audit_out/temporal_schema_probe.json",JSON.stringify({
+ top_keys:Object.keys(horo),
+ yearly_keys:Object.keys(horo.yearly||{}),
+ monthly_keys:Object.keys(horo.monthly||{}),
+ age_keys:Object.keys(horo.age||{}),
+ year:{index:horo.yearly?.index, branch:horo.yearly?.earthlyBranch,
+       names:horo.yearly?.palaceNames,mutagen:horo.yearly?.mutagen,
+       stars:horo.yearly?.stars},
+ month:{index:horo.monthly?.index,branch:horo.monthly?.earthlyBranch,
+       names:horo.monthly?.palaceNames},
+ ages:yearChart(2000).palaces.map(p=>({branch:p.earthlyBranch,ages:p.ages})),
+ special:yearChart(2000).palaces.map(p=>({
+   branch:p.earthlyBranch,
+   names:[...(p.majorStars||[]),...(p.minorStars||[]),...(p.adjectiveStars||[])]
+        .map(s=>s.name).filter(s=>/空|煞|劫|破碎|龙德|月德|蜚廉/.test(s))
+ }))
+},null,2)+"\n");
+
 const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0};
 for(const row of records)totals[row.status]=(totals[row.status]||0)+1;
 const differences=records.filter(r=>r.status!=="PASS");
