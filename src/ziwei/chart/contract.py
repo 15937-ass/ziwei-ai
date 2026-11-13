@@ -1,9 +1,9 @@
 """Explicit and versioned chart policy; never inherit iztro defaults silently."""
 
-CHART_CONTRACT_ID = "ZHONGZHOU_WANG_IZTRO_2_6_5_INPUT_V0_2"
+CHART_CONTRACT_ID = "ZHONGZHOU_WANG_IZTRO_2_6_5_INPUT_V0_3"
 ENGINE_NAME = "iztro-js"
 ENGINE_VERSION = "2.6.5"
-ADAPTER_VERSION = "0.1"
+ADAPTER_VERSION = "0.2"
 WANG_MUTAGENS = {
     "甲": [
         "廉贞",
