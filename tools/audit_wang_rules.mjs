@@ -8,12 +8,14 @@
  * so mismatch doesn't prevent the report from being saved.
  */
 import fs from "node:fs";
+import { WANG_MUTAGENS } from "./render_chart.mjs";
 import path from "node:path";
 import { astro } from "iztro";
 
 const cfg = Object.freeze({
   algorithm:"zhongzhou", dayDivide:"current",
-  yearDivide:"normal", horoscopeDivide:"normal", ageDivide:"normal"
+  yearDivide:"normal", horoscopeDivide:"normal", ageDivide:"normal",
+  mutagens:WANG_MUTAGENS
 });
 const BR = [..."子丑寅卯辰巳午未申酉戌亥"];
 const STEMS = [..."甲乙丙丁戊己庚辛壬癸"];
@@ -193,7 +195,7 @@ for (const [year,gender,normal] of [
   [2005,"male",false],[2005,"female",true]
 ]) {
   const chart=solar(year,6,gender);
-  const friends=chart.palaces.find(p=>/交友|奴仆/.test(p.name));
+  const friends=chart.palaces.find(p=>/交友|奴仆|仆役/.test(p.name));
   const health=chart.palaces.find(p=>/疾厄/.test(p.name));
   const fixture="solar "+year+"-07-16 "+gender;
   if (!friends||!health) {
