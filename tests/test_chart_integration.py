@@ -57,3 +57,13 @@ def test_leap_month_fixture_runs_in_pinned_engine() -> None:
     chart = render_chart(make_birth("2023-04-06T12:00"))
     assert "闰" in chart["natal"]["lunar_date"]
     assert chart["policy"]["fix_leap"] is True
+
+def test_wang_1938_calendar_example() -> None:
+    # Wang Tingzhi, 初级讲义, 出生月日换算法:
+    # 1938-12-27 => 农历十一月初六.
+    # His 08:00 Hong Kong example requires longitude/timezone correction.
+    chart = render_chart(BirthInput(
+        "1938-12-27T08:00", 114.17, "Asia/Hong_Kong", "female", "Hong Kong source illustration"
+    ))
+    assert chart["input_to_engine"]["solar_date"] == "1938-12-27"
+    assert "初六" in chart["natal"]["lunar_date"]
