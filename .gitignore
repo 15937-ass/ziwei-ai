@@ -33,3 +33,7 @@ reports/private/
 .vscode/
 .DS_Store
 Thumbs.db
+
+# JS build environment
+node_modules/
+npm-debug.log*
