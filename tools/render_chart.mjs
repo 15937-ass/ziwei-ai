@@ -99,10 +99,12 @@ export function render(payload) {
       new Set(palaces.map(p=>p.name)).size !== 12) {
     throw new Error("iztro returned incomplete/duplicate palace identity");
   }
-  const allMajors = palaces.flatMap(p=>p.major_stars.map(s=>s.name));
-  if (allMajors.length !== 14 || new Set(allMajors).size !== 14 ||
-      allMajors.some(s=>!MAJORS.has(s))) {
-    throw new Error("iztro returned invalid 14 major stars");
+  // iztro's majorStars may also contain 禄存 / 天马. Validate the 14
+  // principal stars specifically; preserve all remaining star records.
+  const allMajors = palaces.flatMap(p=>p.major_stars.map(s=>s.name))
+    .filter(name => MAJORS.has(name));
+  if (allMajors.length !== 14 || new Set(allMajors).size !== 14) {
+    throw new Error("iztro returned invalid 14 principal stars");
   }
   return {
     engine: { name:"iztro-js", version:VERSION },
@@ -114,7 +116,7 @@ export function render(payload) {
     },
     input: payload,
     natal: {
-      solar_date:raw.solarDate,
+      solar_date:String(raw.solarDate).split("-").map((part,i) => i === 0 ? part.padStart(4,"0") : part.padStart(2,"0")).join("-"),
       lunar_date:raw.lunarDate,
       chinese_date:raw.chineseDate,
       time:raw.time,
