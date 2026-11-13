@@ -40,5 +40,6 @@ jobs:
           path: |
             audit_out/wang_location_audit.json
             audit_out/wang_extra_audit.json
+            audit_out/engine_schema_probe.json
           if-no-files-found: warn
           retention-days: 30
