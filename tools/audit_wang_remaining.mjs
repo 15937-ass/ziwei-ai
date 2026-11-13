@@ -112,6 +112,10 @@ for(let k=0;k<10;k++){
  const y=2004+k,stem=STEM[k],branch=S(8+k),fixture="target "+y+"-07-16";
  const h=horoscopeHolder.horoscope(y+"-07-16",6);
  const v=h.toJSON?h.toJSON():h;
+ const natalForIndex=horoscopeHolder.toJSON?horoscopeHolder.toJSON():horoscopeHolder;
+ const annualLifeBranch=Number.isInteger(v.yearly?.index) ?
+   natalForIndex.palaces[v.yearly.index]?.earthlyBranch??null:null;
+ record("45_annual_palace_index",fixture,branch,annualLifeBranch,57,"流年命宫位置由 yearly.index 提取");
  record("45_annual_taisui",fixture,branch,v.yearly?.earthlyBranch??null,57);
  for(let j=0;j<4;j++)
   record("43_annual_four_hua",fixture,HUA[stem][j],
@@ -151,18 +155,22 @@ fs.writeFileSync("audit_out/doujun_case_debug.json",JSON.stringify({
   target:{lunar_date:firstMonthData.lunarDate,solar_date:firstMonthData.solarDate,
     yearly:firstMonthData.yearly,monthly:firstMonthData.monthly,
     age:firstMonthData.age},
-  expected_monthly_branch:"亥"
-},null,2)+"\\n");
+  expected_monthly_branch:"亥",actual_monthly_life_branch:monthLifeBranch,
+  monthly_calendar_branch:firstMonthData.monthly?.earthlyBranch??null
+},null,2)+"\n");
 
+const monthLifeIndex=firstMonthData.monthly?.index;
+const monthLifeBranch=Number.isInteger(monthLifeIndex) ?
+  natalDebug.palaces[monthLifeIndex]?.earthlyBranch??null : null;
 record("46_doujun_monthly_projection","birth lunar 2000-5-10 卯, target 子年正月 (2008-02-20)",
- docExample.expected_doujun,firstMonthData.monthly?.earthlyBranch??null,57,
- "王亭之算子年斗君亥，正月应在亥");
-record("46_doujun_formula_internal","Wang printed p57: 子年五月卯时",
- docExample.expected_doujun,computed,57,"仅原文公式自检，不计作引擎一致性");
+ docExample.expected_doujun,monthLifeBranch,57,
+ "流月命宫应按 monthly.index 对应原局地支；monthly.earthlyBranch 是当月干支而非命宫");
+const sourceSelfCheck={expected:docExample.expected_doujun,computed,match:computed===docExample.expected_doujun};
 const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0,PARTIAL_EXPOSURE:0};
 for(const row of rec)totals[row.status]=(totals[row.status]||0)+1;
 const differences=rec.filter(x=>x.status!=="PASS");
 const summary={
+ source_formula_check:sourceSelfCheck,
  source:"王亭之《中州派紫微斗数初级讲义》印刷43/47–48/55–58页",
  engine:"iztro-js@2.6.5",fixture_count:cache.size,assertion_count:rec.length,
  totals,
