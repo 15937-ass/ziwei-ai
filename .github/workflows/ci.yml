@@ -45,5 +45,6 @@ jobs:
             audit_out/engine_schema_probe.json
             audit_out/temporal_schema_probe.json
             audit_out/wang_remaining_audit.json
+            audit_out/doujun_case_debug.json
           if-no-files-found: warn
           retention-days: 30
