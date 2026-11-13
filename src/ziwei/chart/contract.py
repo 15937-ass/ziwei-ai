@@ -5,6 +5,7 @@ ENGINE_NAME = "iztro-js"
 ENGINE_VERSION = "2.6.5"
 ADAPTER_VERSION = "0.1"
 CHART_POLICY = {
+    "school": "zhongzhou",
     "algorithm": "zhongzhou",
     "astro_type": "heaven",
     "fix_leap": True,
