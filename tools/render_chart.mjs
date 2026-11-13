@@ -88,6 +88,48 @@ const MAJORS = new Set([
   "太阴", "贪狼", "巨门", "天相", "天梁", "七杀", "破军"
 ]);
 
+// From Wang's 初级讲义 printed p43: both 截空 and 旬空 have 正空、傍空
+// locations; iztro 2.6.5 only exposes the principal location as one star.
+const STEMS = [..."甲乙丙丁戊己庚辛壬癸"];
+const JIEKONG_PAIRS = Object.freeze({
+  甲:["申","酉"],乙:["午","未"],丙:["辰","巳"],丁:["寅","卯"],戊:["子","丑"],
+  己:["申","酉"],庚:["午","未"],辛:["辰","巳"],壬:["寅","卯"],癸:["子","丑"]
+});
+const modulo = (v,n) => ((v%n)+n)%n;
+function sourceVoidPairs(raw) {
+  // Do not infer Chinese birth year from Gregorian year: near CNY can differ.
+  const m = String(raw.chineseDate ?? "").match(/^([甲乙丙丁戊己庚辛壬癸])([子丑寅卯辰巳午未申酉戌亥])(?:\s|$)/u);
+  if (!m) throw new Error("cannot identify birth year gan-zhi in iztro Chinese date");
+  const stem=m[1], branch=m[2], stemIdx=STEMS.indexOf(stem);
+  const jie=JIEKONG_PAIRS[stem];
+  const xunStart=modulo(BRANCHES.indexOf(branch)-stemIdx+10,12);
+  const xun=[BRANCHES[xunStart],BRANCHES[modulo(xunStart+1,12)]];
+  const observed=(name)=>raw.palaces.flatMap(p=>
+    [...(p.majorStars??[]),...(p.minorStars??[]),...(p.adjectiveStars??[])]
+      .filter(s=>s.name===name).map(()=>p.earthlyBranch));
+  const make=(name,pair)=>{
+    const main=pair.find(b=>BRANCHES.indexOf(b)%2===stemIdx%2);
+    const secondary=pair.find(b=>b!==main);
+    const engine=observed(name);
+    if (engine.length!==1 || engine[0]!==main) {
+      throw new Error(name+" main branch does not match Wang p43 oracle");
+    }
+    return {
+      principal_branch:main,
+      secondary_branch:secondary,
+      engine_star_branch:engine[0],
+      source:"WANG_TINGZHI_CHUJI_PRINTED_P43",
+      method:"source_pair_plus_yin_yang_principal"
+    };
+  };
+  return {
+    birth_year_stem:stem,
+    birth_year_branch:branch,
+    jiekong:make("截空",jie),
+    xunkong:make("旬空",xun)
+  };
+}
+
 function installedVersion() {
   let dir = path.dirname(fileURLToPath(import.meta.resolve("iztro")));
   while (true) {
@@ -116,6 +158,13 @@ function cleanPalace(p) {
     stem: p.heavenlyStem,
     branch: p.earthlyBranch,
     is_body_palace: Boolean(p.isBodyPalace),
+    is_original_palace: Boolean(p.isOriginalPalace),
+    palace_index: p.index,
+    changsheng12: p.changsheng12 ?? null,
+    boshi12: p.boshi12 ?? null,
+    jiangqian12: p.jiangqian12 ?? null,
+    suiqian12: p.suiqian12 ?? null,
+    small_limit_ages: p.ages ?? [],
     major_stars: (p.majorStars ?? []).map(starRecord),
     minor_stars: (p.minorStars ?? []).map(starRecord),
     adjective_stars: (p.adjectiveStars ?? []).map(starRecord),
@@ -190,6 +239,7 @@ export function render(payload) {
       body_star:raw.body,
       soul_palace_branch:raw.earthlyBranchOfSoulPalace,
       body_palace_branch:raw.earthlyBranchOfBodyPalace,
+      source_void_pairs:sourceVoidPairs(raw),
       palaces
     }
   };
