@@ -109,7 +109,7 @@ export function render(payload) {
   return {
     engine: { name:"iztro-js", version:VERSION },
     policy: {
-      school:"zhongzhou", astro_type:"heaven", fix_leap:true,
+      school:"zhongzhou", algorithm:"zhongzhou", astro_type:"heaven", fix_leap:true,
       day_divide:CONFIG.dayDivide, year_divide:CONFIG.yearDivide,
       horoscope_divide:CONFIG.horoscopeDivide, age_divide:CONFIG.ageDivide,
       language:"zh-CN"
