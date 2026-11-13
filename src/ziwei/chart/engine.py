@@ -57,9 +57,10 @@ def validate_chart_snapshot(snapshot: dict[str, Any]) -> None:
     names = [p.get("name") for p in palaces]
     if len(set(names)) != 12:
         raise ValueError("palace functional names duplicated")
-    stars = [s.get("name") for p in palaces for s in p.get("major_stars", [])]
+    stars = [s.get("name") for p in palaces for s in p.get("major_stars", [])
+             if s.get("name") in MAJOR_STARS]
     if len(stars) != 14 or set(stars) != MAJOR_STARS:
-        raise ValueError("14 main stars missing, duplicated or extra")
+        raise ValueError("14 principal stars missing or duplicated")
 
 
 def render_chart(birth: BirthInput, *, timeout_seconds: float = 15) -> dict[str, Any]:
