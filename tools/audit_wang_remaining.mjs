@@ -100,6 +100,8 @@ for(const gender of ["male","female"]){
 }
 // #45 annual tai sui straightforward and #43 annually flowing four hua:
 // year stem is from target Gregorian date in July, not calendar boundary.
+const FLOW_WENCHANG = ["巳","午","申","酉","申","酉","亥","子","寅","卯"];
+const FLOW_WENQU = ["酉","申","午","巳","午","巳","卯","寅","子","亥"];
 const HUA_LABELS=["禄","权","科","忌"],HUA=CONFIG.mutagens;
 const horoscopeHolder=astro.withOptions({
  type:"lunar", dateStr:"2000-5-10", timeIndex:4, gender:"male",
@@ -118,10 +120,13 @@ for(let k=0;k<10;k++){
  // to source p56. Source's two-step clockwise/counterclockwise with
  // 四墓 removed needs a separate table-derived mapping before PASS verdict.
  const yearlyStars=v.yearly?.stars??[];
- const asStrings=yearlyStars.map((r,i)=>({index:i,stars:(r||[]).map(x=>x.name)}));
- const lc=asStrings.filter(x=>x.stars.includes("流昌")),lq=asStrings.filter(x=>x.stars.includes("流曲"));
- const missing=lc.length!==1||lq.length!==1;
- record("42_liuchang_presence",fixture, true,missing?null:true,56,"流昌、流曲各应唯一");
+ const natal=horoscopeHolder.toJSON ? horoscopeHolder.toJSON() : horoscopeHolder;
+ const namedBranch=(star)=>{
+   const idx=yearlyStars.findIndex(stars=>(stars||[]).some(s=>s.name===star));
+   return idx>=0?natal.palaces[idx]?.earthlyBranch??null:null;
+ };
+ record("42_liuchang",fixture,FLOW_WENCHANG[k],namedBranch("流昌"),56,"王亭之第56页十干安流昌表");
+ record("42_liuchu",fixture,FLOW_WENQU[k],namedBranch("流曲"),56,"王亭之第56页十干安流曲表");
 }
 // #46 Dou Jun: source example 子年五月卯时→亥, year adds +1
 // The engine does not expose a direct doujun field in natal/horoscope;
@@ -129,8 +134,19 @@ for(let k=0;k<10;k++){
 const docExample={birth_lunar_month:5, birth_time_index:3,
   target_year_branch:"子", expected_doujun:"亥"};
 const computed=S(I(docExample.target_year_branch)-(docExample.birth_lunar_month-1)+docExample.birth_time_index);
-record("46_doujun_source_formula", "Wang printed p57: 子年五月卯时",
- docExample.expected_doujun,computed,57,"仅独立公式，尚未比较引擎");
+// Compare the source Doujun formula to iztro's practical monthly location:
+ // in 子年 first lunar month should start at 亥 for birth 五月卯时.
+const testSubject=astro.withOptions({
+ type:"lunar",dateStr:"2000-5-10",timeIndex:3,gender:"male",
+ fixLeap:true,isLeapMonth:false,astroType:"heaven",language:"zh-CN",config:CONFIG
+});
+const firstMonth=testSubject.horoscope("2008-02-20",6);
+const firstMonthData=firstMonth.toJSON?firstMonth.toJSON():firstMonth;
+record("46_doujun_monthly_projection","birth lunar 2000-5-10 卯, target 子年正月 (2008-02-20)",
+ docExample.expected_doujun,firstMonthData.monthly?.earthlyBranch??null,57,
+ "王亭之算子年斗君亥，正月应在亥");
+record("46_doujun_formula_internal","Wang printed p57: 子年五月卯时",
+ docExample.expected_doujun,computed,57,"仅原文公式自检，不计作引擎一致性");
 const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0,PARTIAL_EXPOSURE:0};
 for(const row of rec)totals[row.status]=(totals[row.status]||0)+1;
 const differences=rec.filter(x=>x.status!=="PASS");
@@ -140,7 +156,7 @@ const summary={
  totals,
  differences_by_rule:Object.fromEntries([...new Set(differences.map(x=>x.rule))].map(rule=>
    [rule,differences.filter(x=>x.rule===rule).length])),
- caveat:"第46项 PASS 是原典公式自检，不是 iztro 对照。第42项仅验证存在性，尚未比较正确宫位。"
+ caveat:"第46项原文公式自检不等于引擎对照，另增流月正月位置投影；第42项对照第56页表列宫位。"
 };
 fs.mkdirSync("audit_out",{recursive:true});
 fs.writeFileSync("audit_out/wang_remaining_audit.json",
