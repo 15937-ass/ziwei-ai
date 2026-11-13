@@ -27,8 +27,11 @@ function chart(year,gender="male",lunarMonth=null,hour=6){
 }
 function record(rule,fixture,expected,actual,source_page,subject=""){
  const none=actual===null||actual===undefined||(Array.isArray(actual)&&actual.length===0);
+ const isPartial=Array.isArray(expected) && expected.length===2 &&
+    Array.isArray(actual) && actual.length===1 && expected.includes(actual[0]);
  const status=none?"NOT_EXPOSED":
-  JSON.stringify(expected)===JSON.stringify(actual)?"PASS":"MISMATCH";
+    JSON.stringify(expected)===JSON.stringify(actual)?"PASS":
+    isPartial?"PARTIAL_EXPOSURE":"MISMATCH";
  rec.push({rule,fixture,subject,source_page,expected,actual,status});
 }
 function positions(c,name){
@@ -48,10 +51,16 @@ for(let k=0;k<10;k++){
  const y=2004+k,c=chart(y),stem=STEM[k],branch=S(8+k),
        fixture="solar "+y+"-07-16";
  const jie=sorted(JIE[stem]);
- record("16_jiekong",fixture,jie,sorted(positions(c,"截空")),43);
+ const actualJie=sorted(positions(c,"截空"));
+ const primaryJie=jie.find(p=>I(p)%2===k%2);
+ record("16_jiekong_primary",fixture,primaryJie,actualJie[0]??null,43);
+ record("16_jiekong_pair",fixture,jie,actualJie,43,"应输出正空+傍空，现有星曜数组仅一宫");
  const b=I(branch),j=(b+10-k)%12;
  const xun=[S(j),S(j+1)];
- record("17_xunkong",fixture,sorted(xun),sorted(positions(c,"旬空")),43);
+ const actualXun=sorted(positions(c,"旬空"));
+ const primaryXun=xun.find(p=>I(p)%2===k%2);
+ record("17_xunkong_primary",fixture,primaryXun,actualXun[0]??null,43);
+ record("17_xunkong_pair",fixture,sorted(xun),actualXun,43,"应输出正空+傍空，现有星曜数组仅一宫");
 }
 // #24: six year-branch stars. Source p47–48 and Figure 21.
 const F_LIAN=["申","酉","戌","巳","午","未","寅","卯","辰","亥","子","丑"];
@@ -122,7 +131,7 @@ const docExample={birth_lunar_month:5, birth_time_index:3,
 const computed=S(I(docExample.target_year_branch)-(docExample.birth_lunar_month-1)+docExample.birth_time_index);
 record("46_doujun_source_formula", "Wang printed p57: 子年五月卯时",
  docExample.expected_doujun,computed,57,"仅独立公式，尚未比较引擎");
-const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0};
+const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0,PARTIAL_EXPOSURE:0};
 for(const row of rec)totals[row.status]=(totals[row.status]||0)+1;
 const differences=rec.filter(x=>x.status!=="PASS");
 const summary={
