@@ -67,3 +67,26 @@ def test_wang_1938_calendar_example() -> None:
     ))
     assert chart["input_to_engine"]["solar_date"] == "1938-12-27"
     assert "初六" in chart["natal"]["lunar_date"]
+
+def test_void_pairs_and_twelve_cycles_preserved() -> None:
+    c=render_chart(make_birth("2004-07-16T12:00",gender="male"))
+    v=c["natal"]["source_void_pairs"]
+    assert v["birth_year_stem"] == "甲"
+    assert v["birth_year_branch"] == "申"
+    assert v["jiekong"]["principal_branch"] == "申"
+    assert v["jiekong"]["secondary_branch"] == "酉"
+    assert v["xunkong"]["principal_branch"] == "午"
+    assert v["xunkong"]["secondary_branch"] == "未"
+    for p in c["natal"]["palaces"]:
+        assert isinstance(p["changsheng12"],str)
+        assert isinstance(p["suiqian12"],str)
+        assert isinstance(p["jiangqian12"],str)
+        assert isinstance(p["boshi12"],str)
+        assert isinstance(p["small_limit_ages"],list)
+
+
+def test_tampered_void_branch_rejected() -> None:
+    c=render_chart(make_birth("2004-07-16T12:00",gender="male"))
+    c["natal"]["source_void_pairs"]["jiekong"]["principal_branch"]="子"
+    with pytest.raises(ValueError,match="source void"):
+        validate_chart_snapshot(c)
