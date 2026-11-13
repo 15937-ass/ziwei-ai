@@ -29,7 +29,7 @@ class ClockComparison:
     local_minus_luoyang_minutes: float
     local_shichen: int
     luoyang_shichen: int
-    same_lunar_day_candidate: bool
+    same_apparent_calendar_date: bool
     identical_shichen: bool
     is_analytical_counterfactual: bool = True
 
@@ -51,6 +51,6 @@ def compare_local_to_luoyang(birth: BirthInput) -> ClockComparison:
         local_minus_luoyang_minutes=round(diff_minutes, 6),
         local_shichen=_index(local_clock),
         luoyang_shichen=_index(luoyang),
-        same_lunar_day_candidate=(local_clock.date()==luoyang.date()),
+        same_apparent_calendar_date=(local_clock.date()==luoyang.date()),
         identical_shichen=_index(local_clock)==_index(luoyang),
     )
