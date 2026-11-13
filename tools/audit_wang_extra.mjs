@@ -112,7 +112,7 @@ for(const d of [1,2,3,4,5,6,10,12,15,20,22,29]){
 // 5: first decade starts at bureau age and moves as yin/yang gender.
 for(const [y,g] of [[2004,"male"],[2004,"female"],[2005,"male"],[2005,"female"]]){
  const c=yearChart(y,6,g),life=c.earthlyBranchOfSoulPalace,
-       bureau=Number((c.fiveElementsClass||"").match(/[23456]/)?.[0]);
+       bureau={"水":2,"木":3,"金":4,"土":5,"火":6}[(c.fiveElementsClass||"")[0]];
  const palace=c.palaces.find(p=>p.earthlyBranch===life);
  const range=palace?.decadal?.range;
  const fixture="solar "+y+"-07-16 "+g;
