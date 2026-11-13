@@ -229,6 +229,9 @@ const debugSummary={
     boshi12:p.boshi12??null,
     changsheng12:p.changsheng12??null
   })),
+  chinese_date:diagnosticChart.chineseDate,
+  solar_date:diagnosticChart.solarDate,
+  lunar_date:diagnosticChart.lunarDate,
   soul:diagnosticChart.soul,
   body:diagnosticChart.body,
   five_elements_class:diagnosticChart.fiveElementsClass
