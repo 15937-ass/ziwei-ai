@@ -45,7 +45,7 @@ const JIE={甲:["申","酉"],乙:["午","未"],丙:["辰","巳"],丁:["寅","卯
  己:["申","酉"],庚:["午","未"],辛:["辰","巳"],壬:["寅","卯"],癸:["子","丑"]};
 const sorted=p=>[...p].sort((a,b)=>I(a)-I(b));
 for(let k=0;k<10;k++){
- const y=2004+k,c=chart(y),stem=STEM[k],branch=S(4+k),
+ const y=2004+k,c=chart(y),stem=STEM[k],branch=S(8+k),
        fixture="solar "+y+"-07-16";
  const jie=sorted(JIE[stem]);
  record("16_jiekong",fixture,jie,sorted(positions(c,"截空")),43);
@@ -98,7 +98,7 @@ const horoscopeHolder=astro.withOptions({
  astroType:"heaven", config:CONFIG
 });
 for(let k=0;k<10;k++){
- const y=2004+k,stem=STEM[k],branch=S(4+k),fixture="target "+y+"-07-16";
+ const y=2004+k,stem=STEM[k],branch=S(8+k),fixture="target "+y+"-07-16";
  const h=horoscopeHolder.horoscope(y+"-07-16",6);
  const v=h.toJSON?h.toJSON():h;
  record("45_annual_taisui",fixture,branch,v.yearly?.earthlyBranch??null,57);
