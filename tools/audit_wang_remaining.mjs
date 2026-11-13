@@ -142,6 +142,18 @@ const testSubject=astro.withOptions({
 });
 const firstMonth=testSubject.horoscope("2008-02-20",6);
 const firstMonthData=firstMonth.toJSON?firstMonth.toJSON():firstMonth;
+const natalDebug=testSubject.toJSON?testSubject.toJSON():testSubject;
+fs.mkdirSync("audit_out",{recursive:true});
+fs.writeFileSync("audit_out/doujun_case_debug.json",JSON.stringify({
+  source_case:"王亭之初级讲义 p57 子年五月卯时斗君在亥，子年正月命宫亥",
+  birth_chart:{lunar_date:natalDebug.lunarDate,chinese_date:natalDebug.chineseDate,time:natalDebug.time,
+    soul_palace:natalDebug.earthlyBranchOfSoulPalace},
+  target:{lunar_date:firstMonthData.lunarDate,solar_date:firstMonthData.solarDate,
+    yearly:firstMonthData.yearly,monthly:firstMonthData.monthly,
+    age:firstMonthData.age},
+  expected_monthly_branch:"亥"
+},null,2)+"\\n");
+
 record("46_doujun_monthly_projection","birth lunar 2000-5-10 卯, target 子年正月 (2008-02-20)",
  docExample.expected_doujun,firstMonthData.monthly?.earthlyBranch??null,57,
  "王亭之算子年斗君亥，正月应在亥");
