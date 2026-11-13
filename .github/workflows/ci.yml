@@ -32,6 +32,8 @@ jobs:
         run: node tools/audit_wang_rules.mjs
       - name: Generate extended independent placement oracles
         run: node tools/audit_wang_extra.mjs
+      - name: Generate remaining Wang placement and temporal probes
+        run: node tools/audit_wang_remaining.mjs
       - name: Publish placement differences for review
         if: always()
         uses: actions/upload-artifact@v4
@@ -42,5 +44,6 @@ jobs:
             audit_out/wang_extra_audit.json
             audit_out/engine_schema_probe.json
             audit_out/temporal_schema_probe.json
+            audit_out/wang_remaining_audit.json
           if-no-files-found: warn
           retention-days: 30
