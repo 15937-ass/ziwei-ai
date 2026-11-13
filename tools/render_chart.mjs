@@ -11,12 +11,76 @@ import { fileURLToPath } from "node:url";
 import { astro } from "iztro";
 
 const VERSION = "2.6.5";
+// Wang Tingzhi, 初级讲义 printed p39; ordered 禄、权、科、忌.
+export const WANG_MUTAGENS = Object.freeze({
+  "甲": [
+    "廉贞",
+    "破军",
+    "武曲",
+    "太阳"
+  ],
+  "乙": [
+    "天机",
+    "天梁",
+    "紫微",
+    "太阴"
+  ],
+  "丙": [
+    "天同",
+    "天机",
+    "文昌",
+    "廉贞"
+  ],
+  "丁": [
+    "太阴",
+    "天同",
+    "天机",
+    "巨门"
+  ],
+  "戊": [
+    "贪狼",
+    "太阴",
+    "太阳",
+    "天机"
+  ],
+  "己": [
+    "武曲",
+    "贪狼",
+    "天梁",
+    "文曲"
+  ],
+  "庚": [
+    "太阳",
+    "武曲",
+    "天府",
+    "天同"
+  ],
+  "辛": [
+    "巨门",
+    "太阳",
+    "文曲",
+    "文昌"
+  ],
+  "壬": [
+    "天梁",
+    "紫微",
+    "天府",
+    "武曲"
+  ],
+  "癸": [
+    "破军",
+    "巨门",
+    "太阴",
+    "贪狼"
+  ]
+});
 export const CONFIG = Object.freeze({
   algorithm: "zhongzhou",
   dayDivide: "current", // Wang Tingzhi: next day begins 00:00, not 23:00
   yearDivide: "normal",
   horoscopeDivide: "normal",
   ageDivide: "normal",
+  mutagens: WANG_MUTAGENS,
 });
 const BRANCHES = ["子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥"];
 const MAJORS = new Set([
@@ -112,7 +176,7 @@ export function render(payload) {
       school:"zhongzhou", algorithm:"zhongzhou", astro_type:"heaven", fix_leap:true,
       day_divide:CONFIG.dayDivide, year_divide:CONFIG.yearDivide,
       horoscope_divide:CONFIG.horoscopeDivide, age_divide:CONFIG.ageDivide,
-      language:"zh-CN"
+      language:"zh-CN", mutagens: WANG_MUTAGENS
     },
     input: payload,
     natal: {
