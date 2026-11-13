@@ -38,6 +38,8 @@ jobs:
         run: node tools/audit_wang_dynamic_v2.mjs
       - name: Compare source reading of accumulated leap-month day counts
         run: node tools/audit_wang_leap_day.mjs
+      - name: Independently compare full daily leap-month source/reset models
+        run: node tools/audit_wang_leap_day_full_grid.mjs
       - name: Gate unexpected source mismatches (known void limitation only)
         run: node tools/audit_wang_gate.mjs
       - name: Compare local apparent solar clock with Luoyang reference
@@ -57,5 +59,6 @@ jobs:
             audit_out/luoyang_clock_grid.json
             audit_out/wang_dynamic_v2.json
             audit_out/wang_leap_day_interpretation.json
+            audit_out/wang_leap_day_full_grid.json
           if-no-files-found: warn
           retention-days: 30

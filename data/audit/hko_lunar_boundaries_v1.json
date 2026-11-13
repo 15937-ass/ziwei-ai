@@ -1,0 +1,217 @@
+{
+  "status": "INDEPENDENT_CALENDAR_ANCHORS",
+  "provider": "Hong Kong Observatory (public Gregorian/Lunar conversion tables)",
+  "sources": [
+    {
+      "year": 2017,
+      "url": "https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2017.pdf"
+    },
+    {
+      "year": 2020,
+      "url": "https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2020.pdf"
+    },
+    {
+      "year": 2023,
+      "url": "https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2023.pdf"
+    },
+    {
+      "year": 2025,
+      "url": "https://www.hko.gov.hk/tc/gts/time/calendar/pdf/files/2025.pdf"
+    }
+  ],
+  "note": "Date and lunar month/day manually checked against HKO official annual charts; not an independent astrological placement oracle.",
+  "anchors": [
+    {
+      "date": "2017-06-24",
+      "lunar_year": 2017,
+      "lunar_month": 6,
+      "lunar_day": 1
+    },
+    {
+      "date": "2017-07-22",
+      "lunar_year": 2017,
+      "lunar_month": 6,
+      "lunar_day": 29
+    },
+    {
+      "date": "2017-07-23",
+      "lunar_year": 2017,
+      "lunar_month": -6,
+      "lunar_day": 1
+    },
+    {
+      "date": "2017-08-06",
+      "lunar_year": 2017,
+      "lunar_month": -6,
+      "lunar_day": 15
+    },
+    {
+      "date": "2017-08-07",
+      "lunar_year": 2017,
+      "lunar_month": -6,
+      "lunar_day": 16
+    },
+    {
+      "date": "2017-08-21",
+      "lunar_year": 2017,
+      "lunar_month": -6,
+      "lunar_day": 30
+    },
+    {
+      "date": "2017-08-22",
+      "lunar_year": 2017,
+      "lunar_month": 7,
+      "lunar_day": 1
+    },
+    {
+      "date": "2017-09-19",
+      "lunar_year": 2017,
+      "lunar_month": 7,
+      "lunar_day": 29
+    },
+    {
+      "date": "2020-04-23",
+      "lunar_year": 2020,
+      "lunar_month": 4,
+      "lunar_day": 1
+    },
+    {
+      "date": "2020-05-22",
+      "lunar_year": 2020,
+      "lunar_month": 4,
+      "lunar_day": 30
+    },
+    {
+      "date": "2020-05-23",
+      "lunar_year": 2020,
+      "lunar_month": -4,
+      "lunar_day": 1
+    },
+    {
+      "date": "2020-06-06",
+      "lunar_year": 2020,
+      "lunar_month": -4,
+      "lunar_day": 15
+    },
+    {
+      "date": "2020-06-07",
+      "lunar_year": 2020,
+      "lunar_month": -4,
+      "lunar_day": 16
+    },
+    {
+      "date": "2020-06-20",
+      "lunar_year": 2020,
+      "lunar_month": -4,
+      "lunar_day": 29
+    },
+    {
+      "date": "2020-06-21",
+      "lunar_year": 2020,
+      "lunar_month": 5,
+      "lunar_day": 1
+    },
+    {
+      "date": "2020-07-20",
+      "lunar_year": 2020,
+      "lunar_month": 5,
+      "lunar_day": 30
+    },
+    {
+      "date": "2023-02-20",
+      "lunar_year": 2023,
+      "lunar_month": 2,
+      "lunar_day": 1
+    },
+    {
+      "date": "2023-03-21",
+      "lunar_year": 2023,
+      "lunar_month": 2,
+      "lunar_day": 30
+    },
+    {
+      "date": "2023-03-22",
+      "lunar_year": 2023,
+      "lunar_month": -2,
+      "lunar_day": 1
+    },
+    {
+      "date": "2023-04-05",
+      "lunar_year": 2023,
+      "lunar_month": -2,
+      "lunar_day": 15
+    },
+    {
+      "date": "2023-04-06",
+      "lunar_year": 2023,
+      "lunar_month": -2,
+      "lunar_day": 16
+    },
+    {
+      "date": "2023-04-19",
+      "lunar_year": 2023,
+      "lunar_month": -2,
+      "lunar_day": 29
+    },
+    {
+      "date": "2023-04-20",
+      "lunar_year": 2023,
+      "lunar_month": 3,
+      "lunar_day": 1
+    },
+    {
+      "date": "2023-05-18",
+      "lunar_year": 2023,
+      "lunar_month": 3,
+      "lunar_day": 29
+    },
+    {
+      "date": "2025-06-25",
+      "lunar_year": 2025,
+      "lunar_month": 6,
+      "lunar_day": 1
+    },
+    {
+      "date": "2025-07-24",
+      "lunar_year": 2025,
+      "lunar_month": 6,
+      "lunar_day": 30
+    },
+    {
+      "date": "2025-07-25",
+      "lunar_year": 2025,
+      "lunar_month": -6,
+      "lunar_day": 1
+    },
+    {
+      "date": "2025-08-08",
+      "lunar_year": 2025,
+      "lunar_month": -6,
+      "lunar_day": 15
+    },
+    {
+      "date": "2025-08-09",
+      "lunar_year": 2025,
+      "lunar_month": -6,
+      "lunar_day": 16
+    },
+    {
+      "date": "2025-08-22",
+      "lunar_year": 2025,
+      "lunar_month": -6,
+      "lunar_day": 29
+    },
+    {
+      "date": "2025-08-23",
+      "lunar_year": 2025,
+      "lunar_month": 7,
+      "lunar_day": 1
+    },
+    {
+      "date": "2025-09-21",
+      "lunar_year": 2025,
+      "lunar_month": 7,
+      "lunar_day": 30
+    }
+  ]
+}
