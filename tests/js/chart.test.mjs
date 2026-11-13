@@ -33,3 +33,19 @@ test("late Zi is passed to engine as the same calendar date", () => {
   const result=render({solar_date:"2000-08-16",time_index:12,gender:"male"});
   assert.equal(result.natal.solar_date,"2000-08-16");
 });
+
+test("leap-month first half and second half change the effective month", async () => {
+  const { astro } = await import("iztro");
+  const base = (dateStr, fixLeap) => astro.withOptions({
+    type: "solar", dateStr, timeIndex: 6, gender: "female",
+    fixLeap, language: "zh-CN", astroType: "heaven", config: CONFIG
+  });
+  // Gregorian Apr 5/6 2023 = leap lunar month 2 day 15/16.
+  const earlyFixed = base("2023-04-05", true);
+  const earlyRaw = base("2023-04-05", false);
+  const lateFixed = base("2023-04-06", true);
+  const lateRaw = base("2023-04-06", false);
+  assert.equal(earlyFixed.earthlyBranchOfSoulPalace, earlyRaw.earthlyBranchOfSoulPalace);
+  assert.notEqual(lateFixed.earthlyBranchOfSoulPalace, lateRaw.earthlyBranchOfSoulPalace);
+  assert.match(String(lateFixed.lunarDate), /闰/);
+});
