@@ -34,6 +34,8 @@ jobs:
         run: node tools/audit_wang_extra.mjs
       - name: Generate remaining Wang placement and temporal probes
         run: node tools/audit_wang_remaining.mjs
+      - name: Compare local apparent solar clock with Luoyang reference
+        run: python -m ziwei.chart.time_reference_audit
       - name: Publish placement differences for review
         if: always()
         uses: actions/upload-artifact@v4
@@ -46,5 +48,6 @@ jobs:
             audit_out/temporal_schema_probe.json
             audit_out/wang_remaining_audit.json
             audit_out/doujun_case_debug.json
+            audit_out/luoyang_clock_grid.json
           if-no-files-found: warn
           retention-days: 30
