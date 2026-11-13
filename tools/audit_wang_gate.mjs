@@ -30,3 +30,26 @@ console.log(JSON.stringify({
   source_sample_gate:"PASS_WITH_DOCUMENTED_RAW_VOID_GAPS",
   matched, raw_void_partial:partial, full_wang_certification:false
 },null,2));
+
+
+// New source-derived dynamic observations must not silently regress.
+// Intercalary FLOW-DAY interpretation remains an explicitly unresolved,
+ // separately measured source-policy gap; do not claim a green certification.
+const dynamic = JSON.parse(fs.readFileSync("audit_out/wang_dynamic_v2.json","utf8"));
+if (dynamic.records.length < 239) throw new Error("Wang dynamic oracle coverage regressed");
+for (const row of dynamic.records) {
+  if (row.status !== "PASS") {
+    throw new Error("Wang normal-date/doujun oracle mismatch: " + JSON.stringify(row));
+  }
+}
+const leap = JSON.parse(fs.readFileSync("audit_out/wang_leap_day_interpretation.json","utf8"));
+const divergent = leap.records.filter(r=>r.status==="DIFFERS_FROM_INTERPRETATION");
+if (leap.records.length !== 14 || divergent.length !== 12) {
+  throw new Error("Wang p58 leap-day discrepancy pattern changed; require explicit source review");
+}
+console.log(JSON.stringify({
+  source_dynamic_gate:"PASS_REGULAR_WITH_OPEN_LEAP_SOURCE_INTERPRETATION",
+  dynamic_pass:dynamic.records.length,
+  leap_interpretation_differences:divergent.length,
+  full_source_certification:false
+},null,2));

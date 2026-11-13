@@ -155,11 +155,10 @@
       "printed_page": 41,
       "pdf_page": 21,
       "source_located": true,
-      "oracle_coverage": "戊干天官天福源文口诀与图表仍需进一步核定；已检查其他九干",
-      "source_verified_vs_engine": false,
+      "oracle_coverage": "10个生年天干的天官天福位置均有独立样本；戊年两星同在卯，源文印刷第41页与独立二诀相符，样本已通过",
+      "source_verified_vs_engine": true,
       "sample_tested": true,
-      "complete_source_certification": false,
-      "open_gap": "戊干天官天福源文口诀与图表仍需进一步核定；已检查其他九干"
+      "complete_source_certification": false
     },
     {
       "rule_id": "WANG-AST-15",
@@ -478,7 +477,7 @@
       "printed_page": 55,
       "pdf_page": 28,
       "source_located": true,
-      "oracle_coverage": "流年四化和部分流曜已测；大限/流月/流日/流时全层级尚未完整测",
+      "oracle_coverage": "动态样本验证各时层王亭之十干四化配置传递；月日时天干历法本身仍待独立审核",
       "source_verified_vs_engine": false,
       "sample_tested": true,
       "complete_source_certification": false,
@@ -512,24 +511,30 @@
       "printed_page": 58,
       "pdf_page": 29,
       "source_located": true,
-      "oracle_coverage": "王亭之子年五月卯时斗君示例、正月宫位已测；闰月日时尚未全测",
+      "oracle_coverage": "斗君、流年流月、常规流日流时与乙丑三月原文实例已有239项动态样本；闰月流日累计存在独立待核对差异",
       "source_verified_vs_engine": false,
       "sample_tested": true,
       "complete_source_certification": false,
-      "open_gap": "王亭之子年五月卯时斗君示例、正月宫位已测；闰月日时尚未全测"
+      "open_gap": "2020闰四月/2023闰二月按原文连续计数解释，14项中12项与iztro流日命宫不同；需核实古籍闰月日序和29天闰月归属"
     }
   ],
   "validation_basis": "46组编号规则均有样本或部分断言；不代表原典的所有分支/时层/日期已穷尽",
-  "research_ci_assertions": 3782,
-  "research_ci_matches": 3762,
+  "research_ci_assertions": 4023,
+  "research_ci_matches": 4003,
   "raw_engine_partial_void_pair_assertions": 20,
   "chart_adapter_adds_void_pair_structure": true,
   "remaining_rule_groups": [
-    14,
     16,
     17,
     42,
     43,
     46
-  ]
+  ],
+  "dynamic_independent_and_config_assertions": 239,
+  "leap_daily_candidate_comparisons": {
+    "total": 14,
+    "agreement": 2,
+    "different": 12,
+    "status": "SOURCE_INTERPRETATION_REQUIRES_VERIFICATION"
+  }
 }

@@ -34,6 +34,10 @@ jobs:
         run: node tools/audit_wang_extra.mjs
       - name: Generate remaining Wang placement and temporal probes
         run: node tools/audit_wang_remaining.mjs
+      - name: Compare Wang independent monthly daily and hourly rules
+        run: node tools/audit_wang_dynamic_v2.mjs
+      - name: Compare source reading of accumulated leap-month day counts
+        run: node tools/audit_wang_leap_day.mjs
       - name: Gate unexpected source mismatches (known void limitation only)
         run: node tools/audit_wang_gate.mjs
       - name: Compare local apparent solar clock with Luoyang reference
@@ -51,5 +55,7 @@ jobs:
             audit_out/wang_remaining_audit.json
             audit_out/doujun_case_debug.json
             audit_out/luoyang_clock_grid.json
+            audit_out/wang_dynamic_v2.json
+            audit_out/wang_leap_day_interpretation.json
           if-no-files-found: warn
           retention-days: 30
