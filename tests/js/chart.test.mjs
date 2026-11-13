@@ -49,3 +49,21 @@ test("leap-month first half and second half change the effective month", async (
   assert.notEqual(lateFixed.earthlyBranchOfSoulPalace, lateRaw.earthlyBranchOfSoulPalace);
   assert.match(String(lateFixed.lunarDate), /闰/);
 });
+
+test("Wang p43 exports both principal and secondary void palaces", () => {
+  const result=render({solar_date:"2004-07-16",time_index:6,gender:"male"});
+  const v=result.natal.source_void_pairs;
+  assert.equal(v.birth_year_stem,"甲");
+  assert.equal(v.birth_year_branch,"申");
+  assert.equal(v.jiekong.principal_branch,"申");
+  assert.equal(v.jiekong.secondary_branch,"酉");
+  assert.equal(v.xunkong.principal_branch,"午");
+  assert.equal(v.xunkong.secondary_branch,"未");
+  for(const p of result.natal.palaces){
+    assert.equal(typeof p.changsheng12,"string");
+    assert.equal(typeof p.boshi12,"string");
+    assert.equal(typeof p.jiangqian12,"string");
+    assert.equal(typeof p.suiqian12,"string");
+    assert.ok(Array.isArray(p.small_limit_ages));
+  }
+});

@@ -62,6 +62,31 @@ def validate_chart_snapshot(snapshot: dict[str, Any]) -> None:
     if len(stars) != 14 or set(stars) != MAJOR_STARS:
         raise ValueError("14 principal stars missing or duplicated")
 
+    for palace in palaces:
+        if not all(isinstance(palace.get(field), str) for field in
+                   ("changsheng12", "boshi12", "jiangqian12", "suiqian12")):
+            raise ValueError("missing 12-cycle palace metadata")
+        if not isinstance(palace.get("small_limit_ages"), list):
+            raise ValueError("missing small-limit age cycle")
+    voids = natal.get("source_void_pairs")
+    if not isinstance(voids, dict):
+        raise ValueError("missing source-derived void pairs")
+    for key, star_name in (("jiekong", "截空"), ("xunkong", "旬空")):
+        pair = voids.get(key)
+        if not isinstance(pair, dict):
+            raise ValueError("missing " + key + " source void pair")
+        primary = pair.get("principal_branch")
+        secondary = pair.get("secondary_branch")
+        if (primary not in BRANCHES or secondary not in BRANCHES or primary == secondary or
+                pair.get("engine_star_branch") != primary or
+                pair.get("source") != "WANG_TINGZHI_CHUJI_PRINTED_P43"):
+            raise ValueError("invalid " + key + " source void provenance")
+        raw_pos = [p["branch"] for p in palaces for category in
+                   ("major_stars", "minor_stars", "adjective_stars")
+                   for star in p.get(category, []) if star.get("name") == star_name]
+        if raw_pos != [primary]:
+            raise ValueError(key + " principal position disagrees with iztro")
+
 
 def render_chart(birth: BirthInput, *, timeout_seconds: float = 15) -> dict[str, Any]:
     """Compute location apparent solar time ONCE, then use iztro for astrology.
@@ -92,7 +117,7 @@ def render_chart(birth: BirthInput, *, timeout_seconds: float = 15) -> dict[str,
     if payload.get("input") != request:
         raise ValueError("iztro changed input facts")
     snapshot = {
-        "schema_version": "0.1",
+        "schema_version": "0.2",
         "contract_id": CHART_CONTRACT_ID,
         "engine": {"name":ENGINE_NAME, "version":ENGINE_VERSION,
                    "adapter_version":ADAPTER_VERSION},
