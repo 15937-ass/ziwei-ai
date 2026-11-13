@@ -1,4 +1,4 @@
-name: Python checks
+name: Python and iztro chart checks
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   pull_request:
 
 jobs:
-  test:
+  chart-test:
     runs-on: ubuntu-latest
     permissions:
       contents: read
@@ -17,7 +17,20 @@ jobs:
           python-version: '3.11'
           cache: 'pip'
           cache-dependency-path: pyproject.toml
-      - name: Install package
-        run: python -m pip install --upgrade pip && python -m pip install -e '.[dev]'
-      - name: Run tests
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Install Python
+        run: python -m pip install -e '.[dev]'
+      - name: Install pinned JS chart library
+        run: npm install --ignore-scripts --no-audit --no-fund
+      - name: Node chart regression tests
+        run: npm test
+      - name: Python chart and time tests
         run: python -m pytest -q
+      - name: Preserve npm dependency lock for review
+        uses: actions/upload-artifact@v4
+        with:
+          name: npm-lockfile
+          path: package-lock.json
+          retention-days: 7
