@@ -133,7 +133,7 @@ for(let k=0;k<12;k++){
   water:["巳","寅","戌"],fire:["亥","丑","卯"],
   metal:["寅","卯","戌"],wood:["申","酉","戌"]
  }[grp];
- at("22_jiesha",c,"劫煞",isolate[0],fixture,46);
+ record("22_jiesha",fixture,isolate[0],c.palaces.find(p=>p.jiangqian12==="劫煞")?.earthlyBranch??null,46,"劫煞/将前十二神字段");
  const baseFire=I(isolate[1]),baseBell=I(isolate[2]);
  at("13_huoxing",c,"火星",S(baseFire+6),fixture,41);
  at("13_lingxing",c,"铃星",S(baseBell+6),fixture,41);
@@ -165,6 +165,55 @@ for(const d of [1,2,3,10,15,20,29]){
   const a=find(c,anchor);
   if(a.length!==1){record(rule+"_"+name,fixture,anchor,null,page);continue;}
   at(rule+"_"+name,c,name,S(I(a[0])+shift),fixture,page);
+ }
+}
+
+
+// 14 and 15: year-stem auspicious stars anchored to source pp.41–42.
+// The abbreviated 戊玉兔 verse is withheld for later source/image review.
+const OFFICIAL={
+  甲:["未","酉"],乙:["辰","申"],丙:["巳","子"],丁:["寅","亥"],
+  己:["酉","寅"],庚:["亥","午"],辛:["酉","巳"],壬:["戌","午"],癸:["午","巳"]
+};
+const KITCHEN={
+  甲:"巳",乙:"午",丙:"子",丁:"巳",戊:"午",己:"申",
+  庚:"寅",辛:"午",壬:"酉",癸:"亥"
+};
+for(let k=0;k<10;k++){
+ const stem=ST[k],c=yearChart(2004+k),fixture="solar "+(2004+k)+"-07-16";
+ if(OFFICIAL[stem]){
+  at("14_tianguan",c,"天官",OFFICIAL[stem][0],fixture,41);
+  at("14_tianfu",c,"天福",OFFICIAL[stem][1],fixture,41);
+ }
+ at("15_tianchu",c,"天厨",KITCHEN[stem],fixture,42);
+}
+
+// 38,39,40,41: 12 divine cycles are palace metadata (not star arrays).
+const CHANGE=["长生","沐浴","冠带","临官","帝旺","衰","病","死","墓","绝","胎","养"];
+const SUI=["岁建","晦气","丧门","贯索","官符","小耗","岁破","龙德","白虎","天德","吊客","病符"];
+const JIANG=["将星","攀鞍","岁驿","息神","华盖","劫煞","灾煞","天煞","指背","咸池","月煞","亡神"];
+const BOSHI=["博士","力士","青龙","小耗","将军","奏书","飞廉","喜神","病符","大耗","伏兵","官府"];
+const LU={甲:"寅",乙:"卯",丙:"巳",丁:"午",戊:"巳",己:"午",
+           庚:"申",辛:"酉",壬:"亥",癸:"子"};
+const LONG_START={水:"申",木:"亥",金:"巳",土:"申",火:"寅"};
+for(const [year,gender] of [[2004,"male"],[2004,"female"],[2005,"male"],[2005,"female"]]){
+ const c=yearChart(year,6,gender),stem=ST[(year-2004)%10],
+   branch=S(4+(year-2000)),v=I(branch),
+   yangYear=ST.indexOf(stem)%2===0,forward=(yangYear&&gender==="male")||(!yangYear&&gender==="female"),
+   sign=forward?1:-1,element=(c.fiveElementsClass||"")[0],
+   start=I(LONG_START[element]),lu=I(LU[stem]),
+   wangCenter=I("申子辰".includes(branch)?"子":"寅午戌".includes(branch)?"午":
+               "巳酉丑".includes(branch)?"酉":"卯"),
+   fixture="solar "+year+"-07-16 "+gender;
+ for(let i=0;i<12;i++){
+  const p=c.palaces.find(p=>p.earthlyBranch===S(start+sign*i));
+  record("38_changsheng12",fixture,CHANGE[i],p?.changsheng12??null,54,"step="+i);
+  const q=c.palaces.find(p=>p.earthlyBranch===S(v+i));
+  record("39_suiqian12",fixture,SUI[i],q?.suiqian12??null,54,"step="+i);
+  const h=c.palaces.find(p=>p.earthlyBranch===S(wangCenter+i));
+  record("40_jiangqian12",fixture,JIANG[i],h?.jiangqian12??null,54,"step="+i);
+  const b=c.palaces.find(p=>p.earthlyBranch===S(lu+sign*i));
+  record("41_boshi12",fixture,BOSHI[i],b?.boshi12??null,55,"step="+i);
  }
 }
 
