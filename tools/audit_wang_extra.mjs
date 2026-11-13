@@ -95,7 +95,7 @@ const FU_OFFSETS={
 for(const d of [1,2,3,4,5,6,10,12,15,20,22,29]){
  for(const month of [1,4,8]){
  const c=chart(month,d,4),fixture="lunar 2000-"+month+"-"+d+" time4";
- const bureau=Number((c.fiveElementsClass||"").match(/[23456]/)?.[0]);
+ const bureau={"水":2,"木":3,"金":4,"土":5,"火":6}[(c.fiveElementsClass||"")[0]];
  if(!bureau) { record("06_ziwei",fixture,"2..6",null,34);continue; }
  let n=0;while((d+n)%bureau!==0&&n<6)n++;
  const quotient=(d+n)/bureau;
@@ -147,7 +147,7 @@ for(let k=0;k<12;k++){
  at("25_nianjie",c,"年解",S(10-n),fixture,49);
  at("26_tiancai",c,"天才",S(I(c.earthlyBranchOfSoulPalace)+n),fixture,49);
  at("26_tianshou",c,"天寿",S(I(c.earthlyBranchOfBodyPalace)+n),fixture,49);
- const soul={"子":"贪狼","丑":"贪狼","亥":"贪狼","寅":"禄存",
+ const soul={"子":"贪狼","丑":"巨门","亥":"巨门","寅":"禄存",
    "戌":"禄存","卯":"文曲","酉":"文曲","巳":"武曲","未":"武曲",
    "辰":"廉贞","申":"廉贞","午":"破军"}[b];
  const body={"子":"铃星","午":"火星","丑":"天相","未":"天相",
@@ -167,6 +167,24 @@ for(const d of [1,2,3,10,15,20,29]){
   at(rule+"_"+name,c,name,S(I(a[0])+shift),fixture,page);
  }
 }
+
+const diagnosticChart=yearChart(2000);
+const debugSummary={
+  keys_first_palace:Object.keys(diagnosticChart.palaces[0]),
+  palaces:diagnosticChart.palaces.map(p=>({
+    branch:p.earthlyBranch,
+    palace_name:p.name,
+    jiangqian12:p.jiangqian12??null,
+    suiqian12:p.suiqian12??null,
+    boshi12:p.boshi12??null,
+    changsheng12:p.changsheng12??null
+  })),
+  soul:diagnosticChart.soul,
+  body:diagnosticChart.body,
+  five_elements_class:diagnosticChart.fiveElementsClass
+};
+fs.writeFileSync("audit_out/engine_schema_probe.json",JSON.stringify(debugSummary,null,2)+"\n");
+
 const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0};
 for(const row of records)totals[row.status]=(totals[row.status]||0)+1;
 const differences=records.filter(r=>r.status!=="PASS");
