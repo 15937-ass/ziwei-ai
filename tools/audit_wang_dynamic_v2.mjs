@@ -9,7 +9,7 @@
  */
 import fs from "node:fs";
 import { astro } from "iztro";
-import { Solar } from "lunar-typescript";
+import { Solar, Lunar } from "lunar-typescript";
 import { CONFIG, WANG_MUTAGENS } from "./render_chart.mjs";
 
 const BR = [..."子丑寅卯辰巳午未申酉戌亥"];
@@ -109,6 +109,30 @@ for(const [date,lunarY,lunarM,lunarD,yearB,yearS] of CASES){
    day_actual:dayLife,effective_month:effMonth
  });
 }
+
+// Wang printed p58 worked example: suppose 子 year Doujun=午;
+// in an 乙丑 year Doujun=未, third lunar month life palace=酉,
+// but third lunar month GanZhi is 庚辰, hence 庚 -> 阳、武、府、同.
+// Natal birth lunar month 1 + 午 hour yields 子 year Doujun=午.
+// 2045 is an 乙丑 year, used to keep the target after the natal birth.
+const exampleSubject=astro.withOptions({
+  type:"lunar",dateStr:"2000-1-10",timeIndex:6,gender:"male",
+  fixLeap:true,isLeapMonth:false,astroType:"heaven",
+  language:"zh-CN",config:CONFIG
+});
+const exampleDate=Lunar.fromYmd(2045,3,10).getSolar().toYmd();
+const exampleH=exampleSubject.horoscope(exampleDate,6);
+const exampleNatal=exampleSubject.toJSON();
+const exampleLife=exampleNatal.palaces[exampleH.monthly?.index]?.earthlyBranch??null;
+rec("Wang_p58_乙丑年第三月命宫",exampleDate,"酉",exampleLife,58,
+    {birth_lunar_month:1,birth_hour:"午",source_month:"庚辰"});
+rec("Wang_p58_乙丑年流年地支",exampleDate,"丑",exampleH.yearly?.earthlyBranch,58);
+rec("Wang_p58_第三月天干",exampleDate,"庚",exampleH.monthly?.heavenlyStem,58);
+rec("Wang_p58_第三月地支",exampleDate,"辰",exampleH.monthly?.earthlyBranch,58);
+rec("Wang_p58_第三月四化",exampleDate,
+    JSON.stringify(["太阳","武曲","天府","天同"]),
+    JSON.stringify(exampleH.monthly?.mutagen),58);
+
 const totals={PASS:0,MISMATCH:0,NOT_EXPOSED:0};
 for(const row of records)totals[row.status]=(totals[row.status]||0)+1;
 const misses=records.filter(r=>r.status!=="PASS");
