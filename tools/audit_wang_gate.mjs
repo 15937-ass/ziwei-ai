@@ -42,38 +42,29 @@ for (const row of dynamic.records) {
     throw new Error("Wang normal-date/doujun oracle mismatch: " + JSON.stringify(row));
   }
 }
+// The user selected iztro's native flow-day implementation as the current
+// product baseline. The Wang p58 continuous-count reading remains research
+// evidence, not a blocking release constraint. Do not encode a disputed
+// source interpretation's exact mismatch count into the release gate.
 const leap = JSON.parse(fs.readFileSync("audit_out/wang_leap_day_interpretation.json","utf8"));
-const divergent = leap.records.filter(r=>r.status==="DIFFERS_FROM_INTERPRETATION");
-if (leap.records.length !== 14 || divergent.length !== 12) {
-  throw new Error("Wang p58 leap-day discrepancy pattern changed; require explicit source review");
+if (!Array.isArray(leap.records) || leap.records.length < 14) {
+  throw new Error("Historical leap-day research samples are missing");
 }
-console.log(JSON.stringify({
-  source_dynamic_gate:"PASS_REGULAR_WITH_OPEN_LEAP_SOURCE_INTERPRETATION",
-  dynamic_pass:dynamic.records.length,
-  leap_interpretation_differences:divergent.length,
-  full_source_certification:false
-},null,2));
-
-
-// Pinned iztro 2.6.5 CHARACTERIZATION: intentionally preserves the observed
-// discrepancy rather than certifying Wang's intercalary rule. Any new pattern
-// requires source review, not a silently changed number in the expectation.
 const grid=JSON.parse(fs.readFileSync("audit_out/wang_leap_day_full_grid.json","utf8"));
 const gs=grid.summary;
-if(gs.rows!==708||gs.independent_hko_anchors_checked!==32||
-   gs.month_source_matches!==708||
-   gs.reset_baseline_matches!==708||
-   gs.source_continuous_matches!==238){
-  throw Error("Full leap-day source discrepancy characterization changed; require independent review: "+
+if (gs.rows!==708 || gs.independent_hko_anchors_checked!==32 ||
+    gs.month_source_matches!==gs.rows || gs.reset_baseline_matches!==gs.rows ||
+    !gs.includes_30_day_leap) {
+  throw new Error("Pinned iztro native flow-day or calendar anchoring regressed: "+
     JSON.stringify({rows:gs.rows,anchors:gs.independent_hko_anchors_checked,
-       monthly:gs.month_source_matches,reset:gs.reset_baseline_matches,
-       continuous:gs.source_continuous_matches}));
+      monthMatches:gs.month_source_matches,nativeMatches:gs.reset_baseline_matches}));
 }
-if(!grid.summary.includes_30_day_leap)throw Error("30-day leap month case missing");
 console.log(JSON.stringify({
-  leap_flowday_status:"KNOWN_SOURCE_INTERPRETATION_DIVERGENCE_NOT_PRODUCTION_CERTIFIED",
-  rows:708,externally_anchored_lunar_dates:32,
-  iztro_month_matches:708,iztro_raw_date_baseline_matches:708,
-  Wang_continuous_candidate_matches:238,
-  Wang_continuous_candidate_differences:470
+  active_flow_day_policy:"FLOW_DAY_IZTRO_NATIVE_V1",
+  native_iztro_regression:"PASS",
+  native_rows:gs.reset_baseline_matches,
+  source_interpretation_status:"UNRESOLVED_NONBLOCKING",
+  source_candidate_matches:gs.source_continuous_matches,
+  source_candidate_differences:gs.rows-gs.source_continuous_matches,
+  full_wang_certification:false
 },null,2));
