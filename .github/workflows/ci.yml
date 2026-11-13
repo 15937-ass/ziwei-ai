@@ -23,14 +23,8 @@ jobs:
       - name: Install Python
         run: python -m pip install -e '.[dev]'
       - name: Install pinned JS chart library
-        run: npm install --ignore-scripts --no-audit --no-fund
+        run: npm ci --ignore-scripts --no-audit --no-fund
       - name: Node chart regression tests
         run: npm test
       - name: Python chart and time tests
         run: python -m pytest -q
-      - name: Preserve npm dependency lock for review
-        uses: actions/upload-artifact@v4
-        with:
-          name: npm-lockfile
-          path: package-lock.json
-          retention-days: 7
