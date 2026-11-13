@@ -40,6 +40,22 @@ const NATALS = [
 ];
 const dayIndex=(d)=>Math.floor(Date.parse(d+"T00:00:00Z")/86400000);
 const isoDay=(day)=>new Date(day*86400000).toISOString().slice(0,10);
+// Calendar input is cross-checked against an external publisher, not
+// merely iztro's transitive lunar-typescript dependency.
+const hko=JSON.parse(fs.readFileSync(
+  "data/audit/hko_lunar_boundaries_v1.json","utf8"));
+if(hko.anchors.length!==32)throw Error("HKO independent anchors incomplete");
+for(const anchor of hko.anchors){
+  const [y,m,d]=anchor.date.split("-").map(Number);
+  const l=Solar.fromYmd(y,m,d).getLunar();
+  if(l.getYear()!==anchor.lunar_year||
+     l.getMonth()!==anchor.lunar_month||l.getDay()!==anchor.lunar_day){
+    throw Error("lunar-typescript vs HKO independent calendar anchor "+anchor.date+
+        " expected "+JSON.stringify(anchor)+" actual "+
+        JSON.stringify({year:l.getYear(),month:l.getMonth(),day:l.getDay()}));
+  }
+}
+
 const rows=[], groups=[], examples=[];
 for(const cal of MONTHS) {
  const [before,leapStart,following,end]=cal.starts.map(dayIndex);
@@ -136,7 +152,8 @@ const summary={
  recorded_natal_charts:NATALS.length,
  years:MONTHS.map(x=>x.year),
  includes_30_day_leap:true,
- independent_calendar_fixture_from:"lunar-typescript (shared dependency with iztro; NOT independent ephemeris)",
+ independent_calendar_fixture_from:"lunar-typescript with 32 externally checked HKO calendar anchors",
+ independent_hko_anchors_checked:hko.anchors.length,
  rows:rows.length,
  month_source_matches:rows.filter(r=>r.expected_month_palace===r.actual_month_palace).length,
  source_continuous_matches:aggregate(rows,"continuous_candidate_match"),
