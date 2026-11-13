@@ -1,0 +1,13 @@
+{
+  "name": "ziwei-ai-chart-bridge",
+  "private": true,
+  "type": "module",
+  "version": "0.1.0",
+  "engines": {"node": ">=20"},
+  "dependencies": {
+    "iztro": "2.6.5"
+  },
+  "scripts": {
+    "test": "node --test tests/js/*.test.mjs"
+  }
+}
