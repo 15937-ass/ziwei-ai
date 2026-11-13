@@ -34,6 +34,8 @@ jobs:
         run: node tools/audit_wang_extra.mjs
       - name: Generate remaining Wang placement and temporal probes
         run: node tools/audit_wang_remaining.mjs
+      - name: Gate unexpected source mismatches (known void limitation only)
+        run: node tools/audit_wang_gate.mjs
       - name: Compare local apparent solar clock with Luoyang reference
         run: python -m ziwei.chart.time_reference_audit
       - name: Publish placement differences for review
