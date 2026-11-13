@@ -109,9 +109,18 @@ for(const cal of MONTHS) {
       const daily=Number.isInteger(flow.daily?.index)?
         original.palaces[flow.daily.index]?.earthlyBranch??null:null;
       if(!monthly||!daily) throw new Error("Engine did not expose month/day palace "+date);
+      const supportBasis=phase==="previous_regular"?
+         "general_source_rule":
+        phase==="leap_early"?(precedingDays===30?
+         "explicit_source_30_plus_15_example":"29_day_previous_month_extrapolation"):
+        phase==="leap_late"?
+         "interpreted_late_half_day_renumbering":
+         (leapDays===30?"example_45_day_next_month_continuation":
+         "29_day_leap_next_month_extrapolation");
       const record={
         case_id:natalInput.id,year:cal.year,date,lunar_month:lmonth,lunar_day:lday,
-        phase,prior_month_days:precedingDays,leap_month_days:leapDays,
+        phase,source_support_basis:supportBasis,
+        prior_month_days:precedingDays,leap_month_days:leapDays,
         expected_month_palace:expectedMonthPalace,actual_month_palace:monthly,
         expected_continuous_day_palace:expectedContiguous,
         expected_reset_day_palace:expectedReset,actual_day_palace:daily,
@@ -155,6 +164,12 @@ const summary={
  independent_calendar_fixture_from:"lunar-typescript with 32 externally checked HKO calendar anchors",
  independent_hko_anchors_checked:hko.anchors.length,
  rows:rows.length,
+ by_source_support_basis:Object.fromEntries(
+    [...new Set(rows.map(r=>r.source_support_basis))].map(b=>{
+       const subset=rows.filter(r=>r.source_support_basis===b);
+       return [b,{samples:subset.length,source_differences:subset.filter(r=>!r.continuous_candidate_match).length}];
+    })
+ ),
  month_source_matches:rows.filter(r=>r.expected_month_palace===r.actual_month_palace).length,
  source_continuous_matches:aggregate(rows,"continuous_candidate_match"),
  reset_baseline_matches:aggregate(rows,"reset_baseline_match"),
