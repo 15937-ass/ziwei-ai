@@ -147,6 +147,9 @@ const testSubject=astro.withOptions({
 const firstMonth=testSubject.horoscope("2008-02-20",6);
 const firstMonthData=firstMonth.toJSON?firstMonth.toJSON():firstMonth;
 const natalDebug=testSubject.toJSON?testSubject.toJSON():testSubject;
+const monthLifeIndex=firstMonthData.monthly?.index;
+const monthLifeBranch=Number.isInteger(monthLifeIndex) ?
+  natalDebug.palaces[monthLifeIndex]?.earthlyBranch??null : null;
 fs.mkdirSync("audit_out",{recursive:true});
 fs.writeFileSync("audit_out/doujun_case_debug.json",JSON.stringify({
   source_case:"王亭之初级讲义 p57 子年五月卯时斗君在亥，子年正月命宫亥",
@@ -159,9 +162,6 @@ fs.writeFileSync("audit_out/doujun_case_debug.json",JSON.stringify({
   monthly_calendar_branch:firstMonthData.monthly?.earthlyBranch??null
 },null,2)+"\n");
 
-const monthLifeIndex=firstMonthData.monthly?.index;
-const monthLifeBranch=Number.isInteger(monthLifeIndex) ?
-  natalDebug.palaces[monthLifeIndex]?.earthlyBranch??null : null;
 record("46_doujun_monthly_projection","birth lunar 2000-5-10 卯, target 子年正月 (2008-02-20)",
  docExample.expected_doujun,monthLifeBranch,57,
  "流月命宫应按 monthly.index 对应原局地支；monthly.earthlyBranch 是当月干支而非命宫");
