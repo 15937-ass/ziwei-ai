@@ -171,9 +171,11 @@ for(const d of [1,2,3,10,15,20,29]){
 
 
 // 14 and 15: year-stem auspicious stars anchored to source pp.41–42.
-// The abbreviated 戊玉兔 verse is withheld for later source/image review.
+// Wang printed p41 '戊玉兔' and figure 12 locate 戊天官 at 卯; the
+// shared verse gives 戊 only one rabbit position. Independently corroborated
+// by the separate 天官/天福 verses (戊兔 / 戊寻玉兔): both at 卯.
 const OFFICIAL={
-  甲:["未","酉"],乙:["辰","申"],丙:["巳","子"],丁:["寅","亥"],
+  甲:["未","酉"],乙:["辰","申"],丙:["巳","子"],丁:["寅","亥"],戊:["卯","卯"],
   己:["酉","寅"],庚:["亥","午"],辛:["酉","巳"],壬:["戌","午"],癸:["午","巳"]
 };
 const KITCHEN={
