@@ -92,9 +92,14 @@ for(const gender of ["male","female"]){
 // #45 annual tai sui straightforward and #43 annually flowing four hua:
 // year stem is from target Gregorian date in July, not calendar boundary.
 const HUA_LABELS=["禄","权","科","忌"],HUA=CONFIG.mutagens;
+const horoscopeHolder=astro.withOptions({
+ type:"lunar", dateStr:"2000-5-10", timeIndex:4, gender:"male",
+ fixLeap:true, isLeapMonth:false, language:"zh-CN",
+ astroType:"heaven", config:CONFIG
+});
 for(let k=0;k<10;k++){
  const y=2004+k,stem=STEM[k],branch=S(4+k),fixture="target "+y+"-07-16";
- const c=chart(2000,"male",5,4),h=c.horoscope(y+"-07-16",6);
+ const h=horoscopeHolder.horoscope(y+"-07-16",6);
  const v=h.toJSON?h.toJSON():h;
  record("45_annual_taisui",fixture,branch,v.yearly?.earthlyBranch??null,57);
  for(let j=0;j<4;j++)
