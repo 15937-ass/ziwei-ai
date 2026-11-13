@@ -28,6 +28,17 @@ jobs:
         run: npm test
       - name: Python chart and time tests
         run: python -m pytest -q
+      - name: Generate a real sample natal chart (not a mock)
+        run: python tools/demo_chart.py
+      - name: Upload downloadable sample chart and human-readable report
+        uses: actions/upload-artifact@v4
+        with:
+          name: demo-chart-example
+          path: |
+            audit_out/example_chart_full.json
+            audit_out/example_chart_summary.md
+          if-no-files-found: error
+          retention-days: 30
       - name: Generate source-grounded Wang placement audit
         run: node tools/audit_wang_rules.mjs
       - name: Generate extended independent placement oracles
