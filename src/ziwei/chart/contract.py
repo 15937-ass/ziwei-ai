@@ -81,3 +81,18 @@ CHART_POLICY = {
 BRANCHES = ("子", "丑", "寅", "卯", "辰", "巳", "午", "未", "申", "酉", "戌", "亥")
 MAJOR_STARS = frozenset(("紫微", "天机", "太阳", "武曲", "天同", "廉贞",
                          "天府", "太阴", "贪狼", "巨门", "天相", "天梁", "七杀", "破军"))
+
+
+# Temporal flow-day is a separate policy from the natal chart contract.
+# User decision 2026-11-13: do not block core product development on an
+# unresolved Wang source interpretation of leap-month continuous day counts.
+# Future temporal adapters must return iztro's native horoscope().daily
+# unless the user explicitly chooses a separately source-certified policy.
+FLOW_DAY_POLICY = {
+    "policy_id": "FLOW_DAY_IZTRO_NATIVE_V1",
+    "provider": "iztro-js",
+    "provider_version": ENGINE_VERSION,
+    "mode": "native_horoscope_daily",
+    "wang_leap_continuous_source_status": "unresolved_nonblocking",
+    "wang_full_conformance_claim": False,
+}
