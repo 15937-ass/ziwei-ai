@@ -93,7 +93,7 @@ for(const gender of ["male","female"]){
 // year stem is from target Gregorian date in July, not calendar boundary.
 const HUA_LABELS=["禄","权","科","忌"],HUA=CONFIG.mutagens;
 for(let k=0;k<10;k++){
- const y=2004+k,stem=ST[k],branch=S(4+k),fixture="target "+y+"-07-16";
+ const y=2004+k,stem=STEM[k],branch=S(4+k),fixture="target "+y+"-07-16";
  const c=chart(2000,"male",5,4),h=c.horoscope(y+"-07-16",6);
  const v=h.toJSON?h.toJSON():h;
  record("45_annual_taisui",fixture,branch,v.yearly?.earthlyBranch??null,57);
