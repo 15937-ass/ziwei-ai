@@ -93,7 +93,7 @@ def _format_star(star: dict[str, Any]) -> str:
     if star.get("brightness") is not None:
         parts.append(f"[{star['brightness']}]")
     if star.get("mutagen") is not None:
-        parts.append(f"[化{star['mutagen']}]")
+        parts.append(f"[生年{star['mutagen']}]")
     if star.get("scope") is not None and star["scope"] not in ("origin", "natal"):
         parts.append(f"[scope:{star['scope']}]")
     # The compact textual view retains unfamiliar future star fields too.
@@ -135,11 +135,11 @@ def render_natal_agent_text(
          f"前夹{relations['FLANK_PREVIOUS'][0]:+d}(-1)/后夹{relations['FLANK_NEXT'][0]:+d}"),
         "│ ├三方四正: 本宫 + 两个三合宫 + 对宫",
         "│ └判读约定: 地支是固定坐标；宫名是原局功能；夹宫前后不等于界面左右；空间关系由C12程序计算",
-        "├符号定义: [庙/旺/陷等]=原始亮度; [化禄/权/科/忌]=原局星曜四化标记; 无=该类别无星",
+        "├符号定义: [庙/旺/陷等]=原始亮度; [生年禄/权/科/忌]=原局星曜四化标记; 无=该类别无星",
         "├基本信息",
         f"│ ├性别: {basic['gender']}",
-        f"│ ├五行局数: {basic['five_elements_class']}",
-        f"│ ├命主: {basic['soul_star']}; 身主: {basic['body_star']}",
+        f"│ ├五行局数: {basic['five_elements_class'] or '未提供'}",
+        f"│ ├命主: {basic['soul_star'] or '未提供'}; 身主: {basic['body_star'] or '未提供'}",
         f"│ ├命宫地支: {basic['soul_palace_branch']}; 身宫地支: {basic['body_palace_branch']}",
     ]
     if include_birth_details:
