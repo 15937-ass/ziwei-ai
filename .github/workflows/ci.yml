@@ -37,6 +37,7 @@ jobs:
           path: |
             audit_out/example_chart_full.json
             audit_out/example_chart_summary.md
+            audit_out/example_natal_agent_view.txt
           if-no-files-found: error
           retention-days: 30
       - name: Generate source-grounded Wang placement audit

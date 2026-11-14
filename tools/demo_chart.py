@@ -4,7 +4,7 @@ Usage (repo root):
     python tools/demo_chart.py
     python tools/demo_chart.py examples/birth_input.example.json
 
-Produces two files under audit_out/, suitable for CI artifact download.
+Produces three files under audit_out/, including a Wenmo-style natal Agent view.
 Do not commit actual people's birth inputs or generated charts.
 """
 from __future__ import annotations
@@ -15,6 +15,7 @@ import sys
 
 from ziwei.chart import BirthInput, render_chart, validate_chart_snapshot
 from ziwei.chart.contract import MAJOR_STARS
+from ziwei.spatial import render_natal_agent_text
 
 ROOT = Path(__file__).resolve().parents[1]
 
@@ -92,8 +93,12 @@ def main() -> None:
         json.dumps(chart, ensure_ascii=False, indent=2) + "\n", encoding="utf-8"
     )
     (out / "example_chart_summary.md").write_text(summary, encoding="utf-8")
+    (out / "example_natal_agent_view.txt").write_text(
+        render_natal_agent_text(chart) , encoding="utf-8"
+    )
     print(summary)
     print("Full JSON: audit_out/example_chart_full.json", file=sys.stderr)
+    print("Agent natal text: audit_out/example_natal_agent_view.txt", file=sys.stderr)
 
 
 if __name__ == "__main__":

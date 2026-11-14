@@ -1,5 +1,11 @@
 """Shared twelve-branch spatial vocabulary for future chart and rule adapters."""
 
+from .agent_view import (
+    NATAL_AGENT_VIEW_VERSION,
+    build_natal_agent_view,
+    render_natal_agent_text,
+)
+
 from .normalizer import (
     NATAL_SPATIAL_SCHEMA_VERSION,
     STAR_BUCKETS,
@@ -36,4 +42,5 @@ __all__ = [
     "rotation_permutation", "topology_manifest", "trines",
     "NATAL_SPATIAL_SCHEMA_VERSION", "STAR_BUCKETS", "normalize_natal_snapshot",
     "resolve_star_reference", "restore_chart_snapshot", "snapshot_sha256",
+    "NATAL_AGENT_VIEW_VERSION", "build_natal_agent_view", "render_natal_agent_text",
 ]
