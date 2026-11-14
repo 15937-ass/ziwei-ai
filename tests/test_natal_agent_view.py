@@ -33,7 +33,7 @@ def test_single_global_topology_and_twelve_wenmo_style_palaces():
     assert view["palaces"][-1]["branch"] == "亥"
     assert text.count("├空间前置结构") == 1
     assert text.count("三方四正") == 1
-    assert len(re.findall(r"^│ ├.+宫\\[", text, flags=re.M)) == 12
+    assert len(re.findall(r"^│ ├.+宫\[", text, flags=re.M)) == 12
     assert "前夹+11(-1)/后夹+1" in text
     assert "│ ├主星:" not in text  # nested category, not a global palace
     assert "│ │ ├主星:" in text
