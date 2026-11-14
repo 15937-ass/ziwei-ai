@@ -41,7 +41,7 @@ def test_single_global_topology_and_twelve_wenmo_style_palaces():
     assert "│ │ ├小星:" in text
     assert "│ │ └神煞:" in text
     assert "│ ├命宫[甲子]" in text
-    assert "│ ├夫妻宫[甲卯]" in text
+    assert "│ ├夫妻宫[甲寅]" in text
 
 
 def test_no_per_palace_spatial_repetition_or_temporal_data():
@@ -67,7 +67,7 @@ def test_stars_brightness_mutagens_and_shensha_are_visible_without_invention():
         for p in view["palaces"]
         for star in p["major_stars"]
     ) == 14
-    assert "[旺][化禄]" in text
+    assert "[旺][生年禄]" in text
     assert "天喜" in text
     assert text.count("天喜") == 2  # duplicate occurrences preserved
     assert "禄存" in text  # iztro major bucket non-principal shown as support
